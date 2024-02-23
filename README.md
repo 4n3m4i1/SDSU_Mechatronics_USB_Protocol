@@ -8,8 +8,6 @@ Otherwise we can use CMake
 
 ## Getting Started
 
-Clone this repository
-
     git clone https://github.com/4n3m4i1/SDSU_Mechatronics_USB_Protocol
 
 `client_py` - Software-friendly python wrapper that hides implementation details and exposes nice endpoints to the user, will link to protocol SO
