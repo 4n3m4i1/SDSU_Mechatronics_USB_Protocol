@@ -96,7 +96,7 @@ int main(){
     //    fft_i_fake[n] = n << 2;
     //}
 
-    static uint8_t m = 0;
+   // static uint8_t m = 0;
     static uint8_t ll = 8;
 
     blah = cool_8;
@@ -105,13 +105,16 @@ int main(){
     {
         tud_task(); // tinyusb device task
         //cdc_task();
-        if(tud_cdc_n_available(CDC_CTRL_CHAN)){
+        uint32_t len;
+        if((len = tud_cdc_n_available(CDC_DATA_CHAN)) >= 8){
         //    send_data_packet(h_hat_fake,fft_r_fake,fft_i_fake);
-            for(uint32_t n = 0; n < CDC_PACKET_LEN; ++n){
-                cool_buffer[n] = m++;
-            }
-            send_cdc(CDC_DATA_CHAN, (uint8_t *)blah, ll);
-            tud_cdc_n_read_flush(CDC_CTRL_CHAN);
+            tud_cdc_n_read(CDC_DATA_CHAN, cool_buffer, len);
+            //  for(uint32_t n = 0; n < CDC_PACKET_LEN; ++n){
+            //      cool_buffer[n] = m++;
+            //  }
+            //send_cdc(CDC_DATA_CHAN, (uint8_t *)blah, ll);
+            send_cdc(CDC_DATA_CHAN, cool_buffer, len);
+            tud_cdc_n_read_flush(CDC_DATA_CHAN);
 
             switch(ll){
                 case 8:
