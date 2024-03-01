@@ -2,7 +2,7 @@
 
 /* 
  * @brief Packages all robot actions into a jump table
- * The jump table can be edited here to point to desired functions
+ * The jump table can be edited here --> set_robot_actions <-- to point to desired functions
  * Make sure to use enum values for editing the jump table provided from subtopic headers
  */
 

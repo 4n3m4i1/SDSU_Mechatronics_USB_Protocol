@@ -4,5 +4,6 @@
 #include "usb_parse.h"
 #include "usb_actions.h"
 #include "msg_types.h"
+#include "usb_flags.h"
 
 #endif

@@ -4,6 +4,7 @@ project(mechatronics_usb_protocol)
 
 file(GLOB SOURCES 
     src/parser/usb_parse.c
+    src/parser/usb_flags.c
     src/subtopics/system.c
     src/subtopics/power.c
     src/subtopics/motor.c

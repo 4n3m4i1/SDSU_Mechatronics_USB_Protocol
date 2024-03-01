@@ -3,16 +3,26 @@
 
 #include "byte.h"
 
-typedef struct ParsedMsg {
-    const int topic;      
-    const int subtopic;   
-    const int flags;   
-    const byte_t* data;   
-} ParsedMsg;
+#define INIT_BYTE 0xAB
+
+typedef struct MsgHeader {
+    const byte_t  init_valid;
+    const byte_t  msg_size; 
+} MsgHeader;
+
+typedef struct MsgFields {
+    const byte_t topic;      
+    const byte_t subtopic;   
+    const byte_t data_flags;
+    const byte_t* data; 
+} MsgFields;
+
+MsgHeader parse_header(const byte_t* message);
+MsgFields parse_fields(const byte_t* message, const byte_t msgSize);
 
 /* 
  * Will receive raw buffer from SAM
  */
-ParsedMsg PARSE_MESSAGE(const byte_t* message);
+void HANDLE_MESSAGE(const byte_t* message);
 
 #endif
