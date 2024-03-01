@@ -10,7 +10,7 @@ Otherwise we can use CMake
 
     git clone https://github.com/4n3m4i1/SDSU_Mechatronics_USB_Protocol
 
-`client_py` - Software-friendly python wrapper that hides implementation details and exposes nice endpoints to the user, will link to protocol SO
+`client_py` - Software-friendly python wrapper that hides implementation details and exposes nice endpoints to the user, will link to protocol .SO
 
 `hardware` - Embedded program (in the future multiple) for specific hardware implementation of USB (as of now supports SAM4E)   
 
@@ -20,5 +20,6 @@ Otherwise we can use CMake
 
 ## Maintainers
 
-[@Joseph De Vico](https://github.com/4n3m4i1)
-[@Conner Sommerfield](https://github.com/Repo-Factory/)
+[@Joseph De Vico](https://github.com/4n3m4i1)  
+
+[@Conner Sommerfield](https://github.com/Repo-Factory/)  
