@@ -2,8 +2,7 @@
 #define USB_PARSE_H
 
 #include "byte.h"
-
-#define INIT_BYTE 0xAB
+#include "msg_types.h"
 
 typedef struct MsgHeader {
     const byte_t  init_valid;
@@ -14,7 +13,7 @@ typedef struct MsgFields {
     const byte_t topic;      
     const byte_t subtopic;   
     const byte_t data_flags;
-    byte_t data[8]; 
+    byte_t data[MED_MSG_DATA_BYTES]; 
 } MsgFields;
 
 MsgHeader parse_header(const byte_t* message);

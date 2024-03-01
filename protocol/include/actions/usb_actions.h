@@ -9,6 +9,9 @@
 #include "power.h"
 #include "motor.h"
 
+#define INIT_BYTE   0xAB
+#define EMPTY_FIELD 0x00
+
 void init_robot_actions();
 void set_robot_action(const byte_t topic, const byte_t subtopic, const void (*action)(const byte_t* data));
 

@@ -16,7 +16,7 @@
  * @brief place appropriate values of message into corresponding field of either small/medium/large _message_t struct
  * @param field - pass in an empty struct of desired message_t and the answers will be "returned" here  
  */
-void extract_fields(const byte_t* message, const int msg_size, message_t* fields) 
+void extract_fields(const byte_t* message, const int data_size, message_t* fields) 
 {
     int parsed_bytes = 0;
     for (int i = 0; i < INIT_BYTES; i++) {
@@ -34,9 +34,9 @@ void extract_fields(const byte_t* message, const int msg_size, message_t* fields
     for (int i = 0; i < DATA_FLAG_BYTES; i++) {
         fields->data_flags[i] = message[i + parsed_bytes];
     } parsed_bytes += DATA_FLAG_BYTES;
-    for (int i = 0; i < msg_size; i++) {
+    for (int i = 0; i < data_size; i++) {
         fields->data[i] = message[i + parsed_bytes];
-    } parsed_bytes += msg_size;
+    } parsed_bytes += data_size;
     for (int i = 0; i < RESERVED_BYTES; i++) {
         fields->reserved[i] = message[i + parsed_bytes];
     }
@@ -72,9 +72,9 @@ MsgHeader parse_header(const byte_t* message)
 /* 
  * @brief Pass in raw buffer rcvd from SAM and process fields
  */
-MsgFields parse_fields(const byte_t* message, const byte_t msgSize)
+MsgFields parse_fields(const byte_t* message, const byte_t data_size)
 {
-    message_t fields;       extract_fields(message, msgSize, &fields);
+    message_t fields;       extract_fields(message, data_size, &fields);
     const int topic =       extract_field_value(fields.topic_id,    TOPIC_BYTES);
     const int subtopic =    extract_field_value(fields.subtopic_id, SUBTOPIC_BYTES);
     const int data_flags =  extract_field_value(fields.data_flags,  DATA_FLAG_BYTES);
@@ -84,23 +84,24 @@ MsgFields parse_fields(const byte_t* message, const byte_t msgSize)
         .subtopic = subtopic,
         .data_flags = data_flags,
     };
-    memcpy(&parsed_fields.data, &fields.data, 8);
+    memcpy(&parsed_fields.data, &fields.data, data_size);
     return parsed_fields;
 }
 
 /* 
  * @brief Handle flags and call the appropriate robot function
  */
-void perform_functionality(const MsgFields* msgFields)
+void perform_functionality(const MsgFields* msg_fields, const byte_t num_data_bytes)
 {
-    // handle_flags(msgFields->flags);
-    robot_actions[msgFields->topic][msgFields->subtopic](msgFields->data);
+    // handle_flags(msg_fields->flags);
+    robot_actions[msg_fields->topic][msg_fields->subtopic](msg_fields->data);
 }
 
 void HANDLE_MESSAGE(const byte_t* message)
 {
     const MsgHeader header = parse_header(message);
     if (!header.init_valid) return;
-    const MsgFields fields = parse_fields(message, 8);
-    perform_functionality(&fields);
+    const byte_t num_data_bytes = header.msg_size - NON_DATA_BYTES;
+    const MsgFields fields = parse_fields(message, num_data_bytes);
+    perform_functionality(&fields, num_data_bytes);
 }

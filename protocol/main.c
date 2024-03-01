@@ -86,9 +86,9 @@ TEST(test_message_send)
 {
     init_robot_actions();
     set_robot_action(MOTORS, MOTOR_MOVE, &MOTOR_MOVE_F);
-    const byte_t message[16] = {INIT_BYTE, SMALL_MSG, MOTORS, MOTOR_MOVE, 0,
+    const byte_t message[16] = {INIT_BYTE, SMALL_MSG, MOTORS, MOTOR_MOVE, EMPTY_FIELD,
                                 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-                                0,0,0};
+                                EMPTY_FIELD, EMPTY_FIELD, EMPTY_FIELD};
     HANDLE_MESSAGE(message);
     return true;
 }
