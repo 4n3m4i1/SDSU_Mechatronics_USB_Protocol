@@ -9,8 +9,7 @@
 #include "usb_protocol.h"
 #include <string.h>
 
-#define FIRST_BYTE(message)  message[0]
-#define SECOND_BYTE(message) message[1]
+#define LENGTH(array) sizeof(array) / sizeof(array[0])
 
 /*
  * @brief place appropriate values of message into corresponding field of either small/medium/large _message_t struct
@@ -19,26 +18,14 @@
 void extract_fields(const byte_t* message, const int data_size, message_t* fields) 
 {
     int parsed_bytes = 0;
-    for (int i = 0; i < INIT_BYTES; i++) {
-        fields->init[i] = message[i + parsed_bytes];
-    } parsed_bytes += INIT_BYTES;
-    for (int i = 0; i < META_FLAG_BYTES; i++) {
-        fields->meta_flags[i] = message[i + parsed_bytes];
-    } parsed_bytes += META_FLAG_BYTES;
-    for (int i = 0; i < TOPIC_BYTES; i++) {
-        fields->topic_id[i] = message[i + parsed_bytes];
-    } parsed_bytes += TOPIC_BYTES;
-    for (int i = 0; i < SUBTOPIC_BYTES; i++) {
-        fields->subtopic_id[i] = message[i + parsed_bytes];
-    } parsed_bytes += SUBTOPIC_BYTES;
-    for (int i = 0; i < DATA_FLAG_BYTES; i++) {
-        fields->data_flags[i] = message[i + parsed_bytes];
-    } parsed_bytes += DATA_FLAG_BYTES;
-    for (int i = 0; i < data_size; i++) {
-        fields->data[i] = message[i + parsed_bytes];
-    } parsed_bytes += data_size;
-    for (int i = 0; i < RESERVED_BYTES; i++) {
-        fields->reserved[i] = message[i + parsed_bytes];
+    const int field_sizes[] = {
+                                INIT_BYTES, META_FLAG_BYTES, TOPIC_BYTES, SUBTOPIC_BYTES, 
+                                DATA_FLAG_BYTES, data_size, RESERVED_BYTES  
+                              };
+    byte_t* field_start = (byte_t*)fields;
+    for (int i = 0; i < LENGTH(field_sizes); i++) {
+        memcpy(&field_start[parsed_bytes], &message[parsed_bytes], field_sizes[i]);
+        parsed_bytes += field_sizes[i];
     }
 }
 
@@ -58,8 +45,14 @@ int extract_field_value(const byte_t* field, const int field_size)
     return field_value;
 }
 
+/* 
+ * @brief Before we can parse the message we verify if the send was intentional by checking a start bit.
+ * Then we need to know the size of the message if we want to correctly parse out the data field
+ */
 MsgHeader parse_header(const byte_t* message)
 {
+    #define FIRST_BYTE(message)  message[0]
+    #define SECOND_BYTE(message) message[1]
     const byte_t init_valid = FIRST_BYTE(message) == INIT_BYTE;
     const MetaFlags metaFlags = EXTRACT_META_FLAGS(SECOND_BYTE(message));
     return (MsgHeader)
@@ -97,6 +90,9 @@ void perform_functionality(const MsgFields* msg_fields, const byte_t num_data_by
     robot_actions[msg_fields->topic][msg_fields->subtopic](msg_fields->data);
 }
 
+/* 
+ * @brief Public Function that will take message from buffer and perform appropriate response
+ */
 void HANDLE_MESSAGE(const byte_t* message)
 {
     const MsgHeader header = parse_header(message);
