@@ -78,16 +78,37 @@ void MOTOR_MOVE_F(const byte_t* data)
 {
     for (int i = 0; i < 8; i++) 
     {
-        printf("%d", data[i]);
-    }printf("\n");
+        ASSERT_EQ(i, data[i]);
+    }
 }
 
-TEST(test_message_send) 
+TEST(test_small_message_send) 
 {
     init_robot_actions();
     set_robot_action(MOTORS, MOTOR_MOVE, &MOTOR_MOVE_F);
     const byte_t message[16] = {INIT_BYTE, SMALL_MSG, MOTORS, MOTOR_MOVE, EMPTY_FIELD,
                                 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+                                EMPTY_FIELD, EMPTY_FIELD, EMPTY_FIELD};
+    HANDLE_MESSAGE(message);
+    return true;
+}
+
+void MOTOR_MOVE_F_24(const byte_t* data)
+{
+    for (int i = 0; i < 24; i++) 
+    {
+        ASSERT_EQ(i, data[i]);
+    }
+}
+
+TEST(test_medium_message_send) 
+{
+    init_robot_actions();
+    set_robot_action(MOTORS, MOTOR_MOVE, &MOTOR_MOVE_F_24);
+    const byte_t message[32] = {INIT_BYTE, MEDIUM_MSG, MOTORS, MOTOR_MOVE, EMPTY_FIELD,
+                                0, 1, 2, 3, 4, 5, 6, 7, 8, 
+                                9, 10, 11, 12, 13, 14, 15, 16, 
+                                17, 18, 19, 20, 21, 22, 23,
                                 EMPTY_FIELD, EMPTY_FIELD, EMPTY_FIELD};
     HANDLE_MESSAGE(message);
     return true;
