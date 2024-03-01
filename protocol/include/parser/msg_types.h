@@ -1,7 +1,7 @@
 #ifndef MSG_TYPES_H
 #define MSG_TYPES_H
 
-#define EMPTY_MSG               0
+#define EMPTY_MSG_SIZE          0
 #define SML_MSG_SIZE            16
 #define MED_MSG_SIZE            32
 #define LRG_MSG_SIZE            64
@@ -12,8 +12,8 @@
 #define SUBTOPIC_BYTES          1
 #define DATA_FLAG_BYTES         1
 #define RESERVED_BYTES          3
-#define NON_DATA_BYTES          INIT_BYTES+META_FLAG_BYTES+TOPIC_BYTES+ \
-                                SUBTOPIC_BYTES+DATA_FLAG_BYTES+RESERVED_BYTES
+#define NON_DATA_BYTES          (INIT_BYTES+META_FLAG_BYTES+TOPIC_BYTES+ \
+                                SUBTOPIC_BYTES+DATA_FLAG_BYTES+RESERVED_BYTES)
                                 
 #define LRG_MSG_DATA_BYTES      LRG_MSG_SIZE-NON_DATA_BYTES
 #define MED_MSG_DATA_BYTES      MED_MSG_SIZE-NON_DATA_BYTES
@@ -31,5 +31,12 @@ typedef struct message_t
     byte_t data[MED_MSG_DATA_BYTES];
     byte_t reserved[RESERVED_BYTES];
 } message_t;
+
+typedef enum message_sizes {
+    EMPTY_MSG  =  0x00,
+    SMALL_MSG  =  0x01,
+    MEDIUM_MSG =  0x02,
+    LARGE_MSG  =  0x03
+} message_sizes;
 
 #endif

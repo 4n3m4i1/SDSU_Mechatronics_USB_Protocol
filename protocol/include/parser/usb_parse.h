@@ -14,7 +14,7 @@ typedef struct MsgFields {
     const byte_t topic;      
     const byte_t subtopic;   
     const byte_t data_flags;
-    const byte_t* data; 
+    byte_t data[8]; 
 } MsgFields;
 
 MsgHeader parse_header(const byte_t* message);

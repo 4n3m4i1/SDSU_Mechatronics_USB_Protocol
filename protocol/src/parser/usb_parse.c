@@ -7,6 +7,7 @@
  */
 
 #include "usb_protocol.h"
+#include <string.h>
 
 #define FIRST_BYTE(message)  message[0]
 #define SECOND_BYTE(message) message[1]
@@ -77,13 +78,14 @@ MsgFields parse_fields(const byte_t* message, const byte_t msgSize)
     const int topic =       extract_field_value(fields.topic_id,    TOPIC_BYTES);
     const int subtopic =    extract_field_value(fields.subtopic_id, SUBTOPIC_BYTES);
     const int data_flags =  extract_field_value(fields.data_flags,  DATA_FLAG_BYTES);
-    return (MsgFields)
+    MsgFields parsed_fields = (MsgFields)
     {
         .topic = topic,
         .subtopic = subtopic,
         .data_flags = data_flags,
-        .data = fields.data
     };
+    memcpy(&parsed_fields.data, &fields.data, 8);
+    return parsed_fields;
 }
 
 /* 
@@ -99,6 +101,6 @@ void HANDLE_MESSAGE(const byte_t* message)
 {
     const MsgHeader header = parse_header(message);
     if (!header.init_valid) return;
-    const MsgFields fields = parse_fields(message, header.msg_size);
+    const MsgFields fields = parse_fields(message, 8);
     perform_functionality(&fields);
 }

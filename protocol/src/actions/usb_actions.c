@@ -48,5 +48,9 @@ void set_robot_actions(void)
 /* ****************************** ************************ ****************************** */
 /* ****************************** ************************ ****************************** */
 
+void set_robot_action(const byte_t topic, const byte_t subtopic, const void (*action)(const byte_t* data))
+{
+    robot_actions[topic][subtopic] = action;
+}
 
 void NOP(const byte_t* data) {}

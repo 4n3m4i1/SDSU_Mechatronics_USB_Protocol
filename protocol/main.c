@@ -74,6 +74,25 @@ TEST(test_robot_actions)
     return true;
 }
 
+void MOTOR_MOVE_F(const byte_t* data)
+{
+    for (int i = 0; i < 8; i++) 
+    {
+        printf("%d", data[i]);
+    }printf("\n");
+}
+
+TEST(test_message_send) 
+{
+    init_robot_actions();
+    set_robot_action(MOTORS, MOTOR_MOVE, &MOTOR_MOVE_F);
+    const byte_t message[16] = {INIT_BYTE, SMALL_MSG, MOTORS, MOTOR_MOVE, 0,
+                                0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+                                0,0,0};
+    HANDLE_MESSAGE(message);
+    return true;
+}
+
 TEST(test_small_msg_rcv) 
 {
     const byte_t rawMsg[SML_MSG_SIZE] = 

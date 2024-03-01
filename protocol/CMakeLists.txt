@@ -13,12 +13,6 @@ file(GLOB SOURCES
 
 file(GLOB HEADERS 
     include/usb_protocol.h
-    # include/parser/msg_types.h
-    # include/parser/usb_parse.h
-    # include/subtopics/system.h
-    # include/subtopics/power.h
-    # include/subtopics/motor.h
-    # include/actions/usb_topics.h
 )
 
 include_directories(
