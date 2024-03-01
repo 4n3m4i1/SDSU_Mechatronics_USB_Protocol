@@ -11,18 +11,21 @@ file(GLOB SOURCES
 )
 
 file(GLOB HEADERS 
-    include/parser/msg_types.h
-    include/parser/usb_parse.h
-    include/subtopics/system.h
-    include/subtopics/power.h
-    include/subtopics/motor.h
-    include/topics/usb_topics.h
+    include/usb_protocol.h
+    # include/parser/msg_types.h
+    # include/parser/usb_parse.h
+    # include/subtopics/system.h
+    # include/subtopics/power.h
+    # include/subtopics/motor.h
+    # include/actions/usb_topics.h
 )
 
 include_directories(
+    include
     include/parser
     include/subtopics
-    include/topics
+    include/actions
+    util
 )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES})

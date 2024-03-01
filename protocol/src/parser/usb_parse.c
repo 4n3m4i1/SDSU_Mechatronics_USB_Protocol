@@ -7,7 +7,7 @@
  */
 
 #include "usb_parse.h"
-#include "usb_topics.h"
+#include "usb_actions.h"
 #include "msg_types.h"
 
 #define BYTE_SIZE 8
@@ -69,7 +69,7 @@ void perform_functionality(const int topic, const int subtopic, const int flags,
 /* 
  * @brief Pass in raw buffer rcvd from SAM and process fields to invoke appropriate robot response
  */
-void HANDLE_MESSAGE(const byte_t* message)
+ParsedMsg PARSE_MESSAGE(const byte_t* message)
 {
     small_message_t fields; extract_fields(message, &fields);
     const int init =        extract_field_value(fields.init,        INIT_BYTES);
@@ -78,5 +78,7 @@ void HANDLE_MESSAGE(const byte_t* message)
     const int subtopic =    extract_field_value(fields.subtopic_id, SUBTOPIC_BYTES);
     const int flags =       extract_field_value(fields.data_flags,  DATA_FLAG_BYTES);
     const int reserved =    extract_field_value(fields.reserved,    RESERVED_BYTES);
-    perform_functionality   (topic, subtopic, flags, fields.data);
+    // perform_functionality   (topic, subtopic, flags, fields.data);
+
+    return (ParsedMsg){.topic = topic, .subtopic = subtopic, .flags = flags};
 }

@@ -4,11 +4,12 @@
 #define NUM_TOPICS    256
 #define NUM_SUBTOPICS 256
 
+#include "byte.h"
 #include "system.h"
 #include "power.h"
 #include "motor.h"
 
-typedef unsigned char byte_t;
+void init_robot_actions();
 
 typedef enum device_topic_t
 {
@@ -23,7 +24,5 @@ typedef enum device_topic_t
  *        The data field should be passed as a parameter to these functions
  */
 extern void (*robot_actions[NUM_TOPICS][NUM_SUBTOPICS])(const byte_t* data);
-
-void init_robot_actions();
 
 #endif
