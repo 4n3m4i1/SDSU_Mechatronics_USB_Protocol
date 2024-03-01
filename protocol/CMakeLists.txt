@@ -32,7 +32,9 @@ include_directories(
 )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
+add_library(${PROJECT_NAME}_static STATIC ${SOURCES})
 add_executable(${PROJECT_NAME}.bin usb_test.c)
 target_link_libraries(${PROJECT_NAME}.bin ${PROJECT_NAME})
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
+install(TARGETS ${PROJECT_NAME}_static DESTINATION lib)
 install(FILES ${HEADERS} DESTINATION include/${PROJECT_NAME})

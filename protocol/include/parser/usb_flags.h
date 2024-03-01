@@ -27,6 +27,8 @@ MetaFlags EXTRACT_META_FLAGS(const byte_t meta_flags);
                     /*   10   |   10   |   10   |   10   */
                     /*  RSVD     RSVD     RSVD     TYPE  */
 
+byte_t COMPOSE_META_FLAGS(const MetaFlags* meta_flags);
+
 typedef struct DataFlags {
     const byte_t RSVD_0;
     const byte_t RSVD_1;
@@ -34,4 +36,4 @@ typedef struct DataFlags {
     const byte_t MSG_TYPE;
 } DataFlags; 
 
-DataFlags EXTRACT_DATA_FLAGS(const byte_t meta_flags);
+DataFlags EXTRACT_DATA_FLAGS(const byte_t data_flags);

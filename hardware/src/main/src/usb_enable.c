@@ -5,7 +5,7 @@
 #include <asf.h>
 #include "usb_enable.h"
 
-volatile bool usb_enabled = false;
+volatile int usb_enabled = false;
 bool my_callback_cdc_enable(void)
 {
     return usb_enabled = true;

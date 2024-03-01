@@ -4,11 +4,19 @@
 #include "byte.h"
 #include "msg_types.h"
 
+/* 
+ * Every message will have some beginning metadata scanned before processing
+ */
 typedef struct MsgHeader {
     const byte_t  init_valid;
     const byte_t  msg_size; 
 } MsgHeader;
 
+/* 
+ * We'll abstract out the important parts of the message with this struct
+ * Even if we get a small message, we'll always allocate space for a large message
+ *  to keep data extraction dynamic
+ */
 typedef struct MsgFields {
     const byte_t topic;      
     const byte_t subtopic;   

@@ -1,7 +1,7 @@
 #ifndef MSG_TYPES_H
 #define MSG_TYPES_H
 
-#define EMPTY_MSG_SIZE          0
+#define EMPTY_MSG_SIZE          8
 #define SML_MSG_SIZE            16
 #define MED_MSG_SIZE            32
 #define LRG_MSG_SIZE            64
@@ -23,13 +23,13 @@ typedef unsigned char byte_t;
 
 typedef struct message_t
 {
-    byte_t init[INIT_BYTES];
-    byte_t meta_flags[META_FLAG_BYTES];
-    byte_t topic_id[TOPIC_BYTES];
-    byte_t subtopic_id[SUBTOPIC_BYTES];
-    byte_t data_flags[DATA_FLAG_BYTES];
-    byte_t data[MED_MSG_DATA_BYTES];
-    byte_t reserved[RESERVED_BYTES];
+    byte_t init         [INIT_BYTES];
+    byte_t meta_flags   [META_FLAG_BYTES];
+    byte_t topic_id     [TOPIC_BYTES];
+    byte_t subtopic_id  [SUBTOPIC_BYTES];
+    byte_t data_flags   [DATA_FLAG_BYTES];
+    byte_t data         [MED_MSG_DATA_BYTES];
+    byte_t reserved     [RESERVED_BYTES];
 } message_t;
 
 typedef enum message_sizes {

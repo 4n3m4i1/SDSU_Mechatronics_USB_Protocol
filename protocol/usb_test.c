@@ -86,7 +86,9 @@ TEST(test_small_message_send)
 {
     init_robot_actions();
     set_robot_action(MOTORS, MOTOR_MOVE, &MOTOR_MOVE_F);
-    const byte_t message[16] = {INIT_BYTE, SMALL_MSG, MOTORS, MOTOR_MOVE, EMPTY_FIELD,
+    const MetaFlags meta_flags = (MetaFlags){.MSG_SIZE = SMALL_MSG};
+    const byte_t flags_byte = COMPOSE_META_FLAGS(&meta_flags);
+    const byte_t message[16] = {INIT_BYTE, flags_byte, MOTORS, MOTOR_MOVE, EMPTY_FIELD,
                                 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
                                 EMPTY_FIELD, EMPTY_FIELD, EMPTY_FIELD};
     HANDLE_MESSAGE(message);
@@ -105,7 +107,9 @@ TEST(test_medium_message_send)
 {
     init_robot_actions();
     set_robot_action(MOTORS, MOTOR_MOVE, &MOTOR_MOVE_F_24);
-    const byte_t message[32] = {INIT_BYTE, MEDIUM_MSG, MOTORS, MOTOR_MOVE, EMPTY_FIELD,
+    const MetaFlags meta_flags = (MetaFlags){.MSG_SIZE = MEDIUM_MSG};
+    const byte_t flags_byte = COMPOSE_META_FLAGS(&meta_flags);
+    const byte_t message[32] = {INIT_BYTE, flags_byte, MOTORS, MOTOR_MOVE, EMPTY_FIELD,
                                 0, 1, 2, 3, 4, 5, 6, 7, 8, 
                                 9, 10, 11, 12, 13, 14, 15, 16, 
                                 17, 18, 19, 20, 21, 22, 23,
