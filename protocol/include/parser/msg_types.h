@@ -21,7 +21,8 @@
 
 #include "byte.h"
 
-typedef struct message_t
+/* This defines the message protocol */
+typedef struct full_message_t
 {
     byte_t init         [INIT_BYTES];
     byte_t meta_flags   [META_FLAG_BYTES];
@@ -30,6 +31,14 @@ typedef struct message_t
     byte_t data_flags   [DATA_FLAG_BYTES];
     byte_t data         [MED_MSG_DATA_BYTES];
     byte_t reserved     [RESERVED_BYTES];
+} full_message_t;
+
+typedef struct message_t
+{
+    byte_t topic_id     [TOPIC_BYTES];
+    byte_t subtopic_id  [SUBTOPIC_BYTES];
+    byte_t data_flags   [DATA_FLAG_BYTES];
+    byte_t data         [MED_MSG_DATA_BYTES];
 } message_t;
 
 typedef enum message_sizes {

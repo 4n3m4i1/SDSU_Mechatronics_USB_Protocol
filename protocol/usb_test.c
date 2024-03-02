@@ -88,10 +88,9 @@ TEST(test_small_message_send)
     set_robot_action(MOTORS, MOTOR_MOVE, &MOTOR_MOVE_F);
     const MetaFlags meta_flags = (MetaFlags){.MSG_SIZE = SMALL_MSG};
     const byte_t flags_byte = COMPOSE_META_FLAGS(&meta_flags);
-    const byte_t message[16] = {INIT_BYTE, flags_byte, MOTORS, MOTOR_MOVE, EMPTY_FIELD,
-                                0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-                                EMPTY_FIELD, EMPTY_FIELD, EMPTY_FIELD};
-    HANDLE_MESSAGE(message);
+    const byte_t message[SML_MSG_SIZE-5] = {MOTORS, MOTOR_MOVE, EMPTY_FIELD,
+                                0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,};
+    HANDLE_MESSAGE(message, SML_MSG_SIZE);
     return true;
 }
 
@@ -109,39 +108,34 @@ TEST(test_medium_message_send)
     set_robot_action(MOTORS, MOTOR_MOVE, &MOTOR_MOVE_F_24);
     const MetaFlags meta_flags = (MetaFlags){.MSG_SIZE = MEDIUM_MSG};
     const byte_t flags_byte = COMPOSE_META_FLAGS(&meta_flags);
-    const byte_t message[32] = {INIT_BYTE, flags_byte, MOTORS, MOTOR_MOVE, EMPTY_FIELD,
+    const byte_t message[MED_MSG_SIZE-5] = {MOTORS, MOTOR_MOVE, EMPTY_FIELD,
                                 0, 1, 2, 3, 4, 5, 6, 7, 8, 
                                 9, 10, 11, 12, 13, 14, 15, 16, 
-                                17, 18, 19, 20, 21, 22, 23,
-                                EMPTY_FIELD, EMPTY_FIELD, EMPTY_FIELD};
-    HANDLE_MESSAGE(message);
+                                17, 18, 19, 20, 21, 22, 23};
+    HANDLE_MESSAGE(message, MED_MSG_SIZE);
     return true;
 }
 
 TEST(test_small_msg_rcv) 
 {
-    const byte_t rawMsg[SML_MSG_SIZE] = 
+    const byte_t rawMsg[SML_MSG_SIZE-5] = 
     {
-        0xAB, 0x01, 0x01, 0x04,
-        0x01, 0x02, 0x03, 0x04,
+        0x02, 0x03, 0x04,
         0x01, 0x02, 0x03, 0x04,
         0x01, 0x02, 0x03, 0x04,
     };
-    const MsgHeader header = parse_header(rawMsg);
-    ASSERT_EQ(header.msg_size, 16); 
-    const MsgFields fields = parse_fields(rawMsg, header.msg_size);
-    ASSERT_EQ(fields.topic, 0x01);
-    ASSERT_EQ(fields.subtopic, 0x04);
-    ASSERT_EQ(fields.data_flags, 0x01);
+    const MsgFields fields = parse_fields(rawMsg, SML_MSG_SIZE-NON_DATA_BYTES);
+    ASSERT_EQ(fields.topic, 0x02);
+    ASSERT_EQ(fields.subtopic, 0x03);
+    ASSERT_EQ(fields.data_flags, 0x04);
     return true;
 }
 
 TEST(test_large_msg_rcv) 
 {
-    const byte_t rawMsg[MED_MSG_SIZE] = 
+    const byte_t rawMsg[MED_MSG_SIZE-5] = 
     {
-        0xAB, 0x02, 0x02, 0x04,
-        0x01, 0x02, 0x03, 0x04,
+        0x02, 0x03, 0x04,
         0x01, 0x02, 0x03, 0x04,
         0x01, 0x02, 0x03, 0x04,
         0xAB, 0x02, 0x02, 0x04,
@@ -149,40 +143,10 @@ TEST(test_large_msg_rcv)
         0x01, 0x02, 0x03, 0x04,
         0x01, 0x02, 0x03, 0x04
     };
-    const MsgHeader header = parse_header(rawMsg);
-    ASSERT_EQ(header.msg_size, 32);
-    const MsgFields fields = parse_fields(rawMsg, header.msg_size);
+    const MsgFields fields = parse_fields(rawMsg, MED_MSG_SIZE-NON_DATA_BYTES);
     ASSERT_EQ(fields.topic, 0x02);
-    ASSERT_EQ(fields.subtopic, 0x04);
-    ASSERT_EQ(fields.data_flags, 0x01);
-    return true;
-}
-
-TEST(valid_msg_rcv) 
-{
-    const byte_t rawMsg[SML_MSG_SIZE] = 
-    {
-        0xAB, 0x02, 0x02, 0x04,
-        0x01, 0x02, 0x03, 0x04,
-        0x01, 0x02, 0x03, 0x04,
-        0x01, 0x02, 0x03, 0x04,
-    };
-    const MsgHeader header = parse_header(rawMsg);
-    ASSERT_EQ(header.init_valid, true);
-    return true;
-}
-
-TEST(invalid_msg_rcv) 
-{
-    const byte_t rawMsg[SML_MSG_SIZE] = 
-    {
-        0xBB, 0x02, 0x02, 0x04,
-        0x01, 0x02, 0x03, 0x04,
-        0x01, 0x02, 0x03, 0x04,
-        0x01, 0x02, 0x03, 0x04,
-    };
-    const MsgHeader header = parse_header(rawMsg);
-    ASSERT_EQ(header.init_valid, false);
+    ASSERT_EQ(fields.subtopic, 0x03);
+    ASSERT_EQ(fields.data_flags, 0x04);
     return true;
 }
 

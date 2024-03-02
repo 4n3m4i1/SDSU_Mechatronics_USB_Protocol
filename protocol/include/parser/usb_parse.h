@@ -24,12 +24,11 @@ typedef struct MsgFields {
     byte_t data[MED_MSG_DATA_BYTES]; 
 } MsgFields;
 
-MsgHeader parse_header(const byte_t* message);
 MsgFields parse_fields(const byte_t* message, const byte_t msgSize);
 
 /* 
  * Will receive raw buffer from SAM
  */
-void HANDLE_MESSAGE(const byte_t* message);
+void HANDLE_MESSAGE(const byte_t* message, const byte_t msg_size);
 
 #endif

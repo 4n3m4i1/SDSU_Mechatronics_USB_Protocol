@@ -11,7 +11,7 @@
 
 #define LENGTH(array) sizeof(array) / sizeof(array[0])
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
-#define POS(value) MAX(value, 0)
+#define POSITIVE(value) MAX(value, 0)
 
 /*
  * @brief place appropriate values of message into corresponding field of either small/medium/large _message_t struct
@@ -20,10 +20,7 @@
 void extract_fields(const byte_t* message, const int data_size, message_t* fields) 
 {
     int parsed_bytes = 0;
-    const int field_sizes[] = {
-                                INIT_BYTES, META_FLAG_BYTES, TOPIC_BYTES, SUBTOPIC_BYTES, 
-                                DATA_FLAG_BYTES, data_size, RESERVED_BYTES  
-                              };
+    const int field_sizes[] = {TOPIC_BYTES, SUBTOPIC_BYTES, DATA_FLAG_BYTES, data_size};
     byte_t* field_start = (byte_t*)fields;
     for (int i = 0; i < LENGTH(field_sizes); i++) {
         memcpy(&field_start[parsed_bytes], &message[parsed_bytes], field_sizes[i]);
@@ -48,23 +45,6 @@ int extract_field_value(const byte_t* field, const int field_size)
 }
 
 /* 
- * @brief Before we can parse the message we verify if the send was intentional by checking a start byte.
- * Then we need to know the size of the message if we want to correctly parse out the data field
- */
-MsgHeader parse_header(const byte_t* message)
-{
-    #define FIRST_BYTE(message)  message[0]
-    #define SECOND_BYTE(message) message[1]
-    const byte_t init_valid = FIRST_BYTE(message) == INIT_BYTE;
-    const MetaFlags metaFlags = EXTRACT_META_FLAGS(SECOND_BYTE(message));
-    return (MsgHeader)
-    {
-        .init_valid = init_valid,
-        .msg_size   = metaFlags.MSG_SIZE
-    };
-}
-
-/* 
  * @brief Pass in raw buffer rcvd from SAM and process fields
  */
 MsgFields parse_fields(const byte_t* message, const byte_t data_size)
@@ -86,7 +66,7 @@ MsgFields parse_fields(const byte_t* message, const byte_t data_size)
 /* 
  * @brief Handle flags(TODO) and call the appropriate robot function
  */
-void perform_functionality(const MsgFields* msg_fields, const byte_t num_data_bytes)
+void perform_functionality(const MsgFields* msg_fields)
 {
     robot_actions[msg_fields->topic][msg_fields->subtopic](msg_fields->data);
 }
@@ -95,10 +75,8 @@ void perform_functionality(const MsgFields* msg_fields, const byte_t num_data_by
  * @brief Public Function that will take message from buffer and perform appropriate response.
  * This can be called in Main loop, pass in buffer with received USB message
  */
-void HANDLE_MESSAGE(const byte_t* message)
+void HANDLE_MESSAGE(const byte_t* message, const byte_t msg_size)
 {
-    const MsgHeader header = parse_header(message); if (!header.init_valid) return;
-    const byte_t num_data_bytes = POS(header.msg_size-NON_DATA_BYTES);
-    const MsgFields fields = parse_fields(message, num_data_bytes);
-    perform_functionality(&fields, num_data_bytes);
+    const MsgFields fields = parse_fields(message, msg_size);
+    perform_functionality(&fields);
 }
