@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "usb_protocol.h"
+#include "mech_usb_protocol.h"
 
 /* 
  * @brief Test USB Protocol

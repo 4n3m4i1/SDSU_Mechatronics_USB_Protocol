@@ -27,5 +27,5 @@ include_directories(
     protocol/util
 )
 
-add_library(usb_protocol STATIC ${USB_PROTOCOL_SOURCES} ${USB_PROTOCOL_HEADERS})
-target_link_libraries(${PROJECT_NAME} usb_protocol)
+add_library(mechatronics_usb_protocol STATIC ${USB_PROTOCOL_SOURCES} ${USB_PROTOCOL_HEADERS})
+target_link_libraries(${PROJECT_NAME} mechatronics_usb_protocol)

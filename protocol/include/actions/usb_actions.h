@@ -1,8 +1,8 @@
 #ifndef USB_TOPICS_H
 #define USB_TOPICS_H
 
-#define NUM_TOPICS    256
-#define NUM_SUBTOPICS 256
+#define NUM_TOPICS    128
+#define NUM_SUBTOPICS  32
 
 #include "byte.h"
 #include "system.h"
