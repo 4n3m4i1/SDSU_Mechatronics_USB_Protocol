@@ -39,4 +39,12 @@ typedef enum message_sizes {
     LARGE_MSG  =  0x03
 } message_sizes;
 
+typedef enum byte_indeces {
+    INIT_BYTE_INDEX       =  0x00,
+    METAFLAGS_BYTE_INDEX  =  0x01,
+    TOPIC_BYTE_INDEX      =  0x02,
+    SUBTOPIC_BYTE_INDEX   =  0x03,
+    DATAFLAGS_BYTE_INDEX  =  0x04
+} byte_indeces;
+
 #endif
