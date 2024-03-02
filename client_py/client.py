@@ -10,3 +10,4 @@ def spin_motors(thrusts: list[float]):
     usb_message.subtopic_id = USB_MSGS.NONE
     usb_message.flags = USB_MSGS.NO_SUBTOPIC
     usb_message.data = thrusts # you would actually have to do float to byte conversion here
+

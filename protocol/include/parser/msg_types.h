@@ -19,7 +19,7 @@
 #define MED_MSG_DATA_BYTES      MED_MSG_SIZE-NON_DATA_BYTES
 #define SML_MSG_DATA_BYTES      SML_MSG_SIZE-NON_DATA_BYTES
 
-typedef unsigned char byte_t;
+#include "byte.h"
 
 typedef struct message_t
 {

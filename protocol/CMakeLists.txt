@@ -12,7 +12,7 @@ file(GLOB SOURCES
 )
 
 file(GLOB HEADERS 
-    include/usb_protocol.h
+    include/mech_usb_protocol.h
     include/parser/usb_parse.h
     include/parser/usb_flags.h
     include/parser/msg_types.h
@@ -31,7 +31,7 @@ include_directories(
     util
 )
 
-add_library(${PROJECT_NAME} SHARED ${SOURCES})
+add_library(${PROJECT_NAME} SHARED ${SOURCES} ${HEADERS})
 add_library(${PROJECT_NAME}_static STATIC ${SOURCES})
 add_executable(${PROJECT_NAME}.bin usb_test.c)
 target_link_libraries(${PROJECT_NAME}.bin ${PROJECT_NAME})

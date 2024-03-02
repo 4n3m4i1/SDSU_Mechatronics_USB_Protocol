@@ -6,7 +6,7 @@
  * @brief Defines Message Handling for USB Messages sent to Embedded System
  */
 
-#include "usb_protocol.h"
+#include "mech_usb_protocol.h"
 #include <string.h>
 
 #define LENGTH(array) sizeof(array) / sizeof(array[0])
@@ -48,7 +48,7 @@ int extract_field_value(const byte_t* field, const int field_size)
 }
 
 /* 
- * @brief Before we can parse the message we verify if the send was intentional by checking a start bit.
+ * @brief Before we can parse the message we verify if the send was intentional by checking a start byte.
  * Then we need to know the size of the message if we want to correctly parse out the data field
  */
 MsgHeader parse_header(const byte_t* message)
