@@ -28,8 +28,6 @@ int move_motors(const byte_t* thrusts)
 
 void construct_message(const message_t* message, const int msg_size, byte_t* buffer)
 {
-    buffer[INIT_BYTE_INDEX]      = message->init;
-    buffer[METAFLAGS_BYTE_INDEX] = message->meta_flags;
     buffer[TOPIC_BYTE_INDEX]     = message->topic_id;
     buffer[SUBTOPIC_BYTE_INDEX]  = message->subtopic_id;
     buffer[DATAFLAGS_BYTE_INDEX] = message->data_flags;
