@@ -1,9 +1,6 @@
-#include "led_f.h"
 #include "usb_enable.h"
 #include "usb_timer.h"
-#include "usb_mech.h"
-#include <stdio.h>
-#include <string.h>
+#include <mechatronics_usb_protocol/usb_protocol.h>
 
 #define USB_PACKET_SIZE_BYTES 4
 #define TIMER_PERIOD 100
@@ -21,8 +18,14 @@ void enter_loop(void)
 {
     for (;;)
     {
-        udi_cdc_read_no_polling((void*)buffer, USB_PACKET_SIZE_BYTES);
-        // HANDLE_MESSAGE(buffer);
+        if (udi_cdc_getc() == INIT_BYTE)
+        {
+            const unsigned char meta_flags_byte = udi_cdc_getc();
+            const MetaFlags meta_flags = EXTRACT_META_FLAGS(meta_flags_byte);
+            const unsigned char msg_size = meta_flags.MSG_SIZE - 2;
+            udi_cdc_read_buf(buffer, msg_size);
+            HANDLE_MESSAGE(buffer, msg_size);
+        }   
         CLEAR_BUFFER(buffer, USB_PACKET_SIZE_BYTES);
     }
 }

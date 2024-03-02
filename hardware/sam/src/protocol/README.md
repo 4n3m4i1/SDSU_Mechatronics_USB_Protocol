@@ -8,9 +8,6 @@ mkdir build && cd build && cmake .. && make && sudo make install
 
 Building will create a dynamic library and install to /usr/local/lib as well as make the protocol's public headers available in /usr/local/include. You can use protocol functions by including with #include <usb_protocol.h>
 
-If you have any dynamic library problems, run this and try again
-    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-
 ## Getting Started
 
 `actions` - This is where the user can set which functions will be called for the associated topic/subtopic

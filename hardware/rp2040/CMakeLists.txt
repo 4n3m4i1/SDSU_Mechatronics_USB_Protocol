@@ -6,6 +6,7 @@ set(MCU "cortex-m4")
 set(FPU "softfp") 
 
 set(CMAKE_C_COMPILER arm-none-eabi-gcc)
+# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -I/usr/local/include")
 
 add_executable(
     ${PROJECT_NAME}
@@ -33,19 +34,9 @@ add_executable(
     src/ASF/sam/utils/cmsis/sam4e/source/templates/system_sam4e.c 
     src/ASF/sam/utils/syscalls/gcc/syscalls.c 
     
-    # src/utils/quick_blink.c
-    # src/projects/can/can_drv.c
-    # src/projects/can/can_ex.c
-    # src/projects/usb/usb.c
-    # src/projects/usb/usb_enable.c
-    # src/projects/other/print.c
-    # src/projects/other/quick.c
- 	# src/projects/other/light.c
-
-    src/projects/usb/src/usb_enable.c
-    src/projects/usb/src/usb_timer.c
-    src/projects/usb/usb_loop.c
-    src/projects/usb/src/usb_mech.c
+    src/main/src/usb_enable.c
+    src/main/src/usb_timer.c
+    src/main/usb_main.c
 )
 
 include_directories(
@@ -110,15 +101,48 @@ include_directories(
     src/ASF/thirdparty/CMSIS/Lib/ 
     src/ASF/thirdparty/CMSIS/Lib/GCC/ 
     src/config/
-    src/utils/include
-    src/projects/usb/include
 )
+
+include_directories(
+    src/utils/include
+    src/main/include
+    src/protocol/include
+    src/protocol/include/parser
+    src/protocol/include/subtopics
+    src/protocol/include/actions
+    src/protocol/util
+)
+
+file(GLOB USB_PROTOCOL_SOURCES 
+    src/protocol/src/parser/usb_parse.c
+    src/protocol/src/parser/usb_flags.c
+    src/protocol/src/subtopics/system.c
+    src/protocol/src/subtopics/power.c
+    src/protocol/src/subtopics/motor.c
+    src/protocol/src/actions/usb_actions.c
+)
+
+file(GLOB USB_PROTOCOL_HEADERS 
+    src/protocol/include/mech_usb_protocol.h
+    src/protocol/include/parser/usb_parse.h
+    src/protocol/include/parser/usb_flags.h
+    src/protocol/include/parser/msg_types.h
+    src/protocol/include/subtopics/system.h
+    src/protocol/include/subtopics/power.h
+    src/protocol/include/subtopics/motor.h
+    src/protocol/include/actions/usb_actions.h
+    src/protocol/util/byte.h
+)
+
+add_library(mech_usb_protocol ${USB_PROTOCOL_SOURCES})
+target_link_libraries(${PROJECT_NAME} mech_usb_protocol)
 
 target_compile_options(${PROJECT_NAME} PRIVATE
     -mcpu=${MCU}
     -mthumb
     -Wall
     -O2
+    -I/usr/local/include
     -D__SAM4E16E__
     -DDEBUG
     -DBOARD=SAM4E_XPLAINED_PRO
