@@ -1,8 +1,9 @@
 #include "usb_enable.h"
 #include "usb_timer.h"
-#include <mechatronics_usb_protocol/usb_protocol.h>
+#include "mech_usb_protocol.h"
+#include "led_f.h"
 
-#define USB_PACKET_SIZE_BYTES 4
+#define USB_PACKET_SIZE_BYTES 32
 #define TIMER_PERIOD 100
 #define CLEAR_BUFFER(buffer, size) \
                                     do { \
@@ -16,16 +17,20 @@ static unsigned char buffer[USB_PACKET_SIZE_BYTES] = {0};
 
 void enter_loop(void)
 {
+    init_robot_actions();
     for (;;)
     {
-        if (udi_cdc_getc() == INIT_BYTE)
+        const int byte = udi_cdc_getc();
+        if (byte == INIT_BYTE)
         {
+            SET_LIGHT_ON();
             const unsigned char meta_flags_byte = udi_cdc_getc();
             const MetaFlags meta_flags = EXTRACT_META_FLAGS(meta_flags_byte);
-            const unsigned char msg_size = meta_flags.MSG_SIZE - 2;
+            const unsigned char msg_size = meta_flags.MSG_SIZE-2;
             udi_cdc_read_buf(buffer, msg_size);
             HANDLE_MESSAGE(buffer, msg_size);
         }   
+        SET_LIGHT_OFF();
         CLEAR_BUFFER(buffer, USB_PACKET_SIZE_BYTES);
     }
 }

@@ -37,6 +37,12 @@ add_executable(
     src/main/src/usb_enable.c
     src/main/src/usb_timer.c
     src/main/usb_main.c
+    src/protocol/src/parser/usb_parse.c
+    src/protocol/src/parser/usb_flags.c
+    src/protocol/src/subtopics/systemctl.c
+    src/protocol/src/subtopics/power.c
+    src/protocol/src/subtopics/motor.c
+    src/protocol/src/actions/usb_actions.c
 )
 
 include_directories(
@@ -101,6 +107,7 @@ include_directories(
     src/ASF/thirdparty/CMSIS/Lib/ 
     src/ASF/thirdparty/CMSIS/Lib/GCC/ 
     src/config/
+    src/utils/include
 )
 
 include_directories(
@@ -113,29 +120,29 @@ include_directories(
     src/protocol/util
 )
 
-file(GLOB USB_PROTOCOL_SOURCES 
-    src/protocol/src/parser/usb_parse.c
-    src/protocol/src/parser/usb_flags.c
-    src/protocol/src/subtopics/system.c
-    src/protocol/src/subtopics/power.c
-    src/protocol/src/subtopics/motor.c
-    src/protocol/src/actions/usb_actions.c
-)
+# file(GLOB USB_PROTOCOL_SOURCES 
+#     src/protocol/src/parser/usb_parse.c
+#     src/protocol/src/parser/usb_flags.c
+#     src/protocol/src/subtopics/system.c
+#     src/protocol/src/subtopics/power.c
+#     src/protocol/src/subtopics/motor.c
+#     src/protocol/src/actions/usb_actions.c
+# )
 
-file(GLOB USB_PROTOCOL_HEADERS 
-    src/protocol/include/mech_usb_protocol.h
-    src/protocol/include/parser/usb_parse.h
-    src/protocol/include/parser/usb_flags.h
-    src/protocol/include/parser/msg_types.h
-    src/protocol/include/subtopics/system.h
-    src/protocol/include/subtopics/power.h
-    src/protocol/include/subtopics/motor.h
-    src/protocol/include/actions/usb_actions.h
-    src/protocol/util/byte.h
-)
+# file(GLOB USB_PROTOCOL_HEADERS 
+#     src/protocol/include/mech_usb_protocol.h
+#     src/protocol/include/parser/usb_parse.h
+#     src/protocol/include/parser/usb_flags.h
+#     src/protocol/include/parser/msg_types.h
+#     src/protocol/include/subtopics/system.h
+#     src/protocol/include/subtopics/power.h
+#     src/protocol/include/subtopics/motor.h
+#     src/protocol/include/actions/usb_actions.h
+#     src/protocol/util/byte.h
+# )
 
-add_library(mech_usb_protocol ${USB_PROTOCOL_SOURCES})
-target_link_libraries(${PROJECT_NAME} mech_usb_protocol)
+# add_library(mech_usb_protocol ${USB_PROTOCOL_SOURCES})
+# target_link_libraries(${PROJECT_NAME} mech_usb_protocol)
 
 target_compile_options(${PROJECT_NAME} PRIVATE
     -mcpu=${MCU}
