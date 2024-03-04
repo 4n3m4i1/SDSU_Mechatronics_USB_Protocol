@@ -5,13 +5,12 @@
 """
 
 import ctypes
-from dataclasses import dataclass
 
 SYS_LIB_PATH            = "/usr/local/lib/"
 USB_CLIENT_NAME         = "libmechatronics_usb_client.so"
 USB_CLIENT              = ctypes.CDLL(SYS_LIB_PATH + USB_CLIENT_NAME)
 
-def move_motors(thrusts):
-    USB_CLIENT.move_motors(bytes(thrusts))
 def sys_kill():
     USB_CLIENT.sys_kill()
+def move_motors(thrusts):
+    USB_CLIENT.move_motors(bytes(thrusts))

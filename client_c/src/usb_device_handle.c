@@ -1,7 +1,8 @@
 #include "usb_device_handle.h"
+#include <stdio.h>
 
 #define FILE_PERMISSION_SETTINGS 0666
-#define SERIAL_FILE "/dev/ttyACM0"
+#define SERIAL_FILE "/dev/ttyACM1"
 
 int read_message(const byte_t* buffer, const int msg_size)
 {

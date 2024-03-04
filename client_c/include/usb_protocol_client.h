@@ -6,6 +6,6 @@
 /* All Available Public APIs for Embedded System */
 
 int sys_kill();
-int move_motors(const byte_t* speeds);
+int move_motors(const byte_t* thrusts);
 
 #endif

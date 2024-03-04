@@ -1,0 +1,6 @@
+[submodule "usb_protocol"]
+	path = usb_protocol
+	url = https://github.com/Package-Repository/usb_protocol
+[submodule "hardware/sam/usb_protocol"]
+	path = hardware/sam/usb_protocol
+	url = https://github.com/Package-Repository/usb_protocol

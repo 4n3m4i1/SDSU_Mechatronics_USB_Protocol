@@ -2,7 +2,7 @@
 
 start_dir=$(pwd)
 
-cd protocol
+cd usb_protocol
 if [ -d "build" ]; then
     sudo rm -r build
 fi
@@ -22,3 +22,5 @@ if [ -d "build" ]; then
 fi
 mkdir build && cd build && cmake .. && make && sudo make install
 cd $start_dir
+
+cp client_py/usb_protocol.py $HOME/ROBOT_LIB

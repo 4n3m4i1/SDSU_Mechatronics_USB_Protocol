@@ -1,6 +1,7 @@
 #include "usb_enable.h"
 #include "usb_timer.h"
 #include "mech_usb_protocol.h"
+#include "usb_actions.h"
 #include "led_f.h"
 
 #define USB_PACKET_SIZE_BYTES 32
@@ -15,9 +16,13 @@
 
 static unsigned char buffer[USB_PACKET_SIZE_BYTES] = {0};
 
+void timer_callback(void)
+{
+
+}
+
 void enter_loop(void)
 {
-    init_robot_actions();
     for (;;)
     {
         const int byte = udi_cdc_getc();
@@ -35,13 +40,15 @@ void enter_loop(void)
     }
 }
 
-void timer_callback(void)
+void test(const byte_t* data)
 {
-    // Handle CAN and device polling
+    SET_LIGHT_ON();
 }
 
 int main(void) 
 {
+    init_robot_actions();
+    set_robot_action(MOTORS, MOTOR_MOVE, &test);
     start_usb_cdc();
     set_timer_callback(&timer_callback, TIMER_PERIOD);
     enter_loop();
