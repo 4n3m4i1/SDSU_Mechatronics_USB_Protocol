@@ -6,3 +6,5 @@ build/
 *.dblite
 *.dis
 .vscode
+*.pyc
+__pycache__

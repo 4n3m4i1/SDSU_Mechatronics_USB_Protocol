@@ -29,9 +29,8 @@ void enter_loop(void)
         if (byte == INIT_BYTE)
         {
             SET_LIGHT_ON();
-            const unsigned char meta_flags_byte = udi_cdc_getc();
-            const MetaFlags meta_flags = EXTRACT_META_FLAGS(meta_flags_byte);
-            const unsigned char msg_size = meta_flags.MSG_SIZE-2;
+            const byte_t meta_flags = udi_cdc_getc();
+            const byte_t msg_size = GET_MESSAGE_SIZE(meta_flags); 
             udi_cdc_read_buf(buffer, msg_size);
             HANDLE_MESSAGE(buffer, msg_size);
         }   
@@ -40,15 +39,14 @@ void enter_loop(void)
     }
 }
 
-void test(const byte_t* data)
+void set_robot_actions()
 {
-    SET_LIGHT_ON();
+    init_robot_actions();
 }
 
 int main(void) 
 {
-    init_robot_actions();
-    set_robot_action(MOTORS, MOTOR_MOVE, &test);
+    set_robot_actions();
     start_usb_cdc();
     set_timer_callback(&timer_callback, TIMER_PERIOD);
     enter_loop();
